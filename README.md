@@ -2,7 +2,7 @@
 
 Backend-Storage Service for Online Shop
 
-#Running without docker
+# Running without docker
 
 Start development server  inside root directory with
 
@@ -12,7 +12,7 @@ nvm spring-boot:run
 
 Spring Depends on an MySQL database which should run on port ```3306```. 
 
-##Configure Spring for local database
+## Configure Spring for local database
 
 Configuration changes are beeing made at ``application.properties``-file.
 
@@ -20,7 +20,7 @@ Configuration changes are beeing made at ``application.properties``-file.
 - might need to change user credentials
 - default database should be named ```db```
 
-#Running with docker
+# Running with docker
 
 To start the docker service including db image run 
 
@@ -39,13 +39,13 @@ inside docker-compose to pull the image from docker repository rather than build
 build: .
 ```
 
-#API
+# API
 
 Server Port: ```3002```
 
 API Endpoint: ````component/````
 
-##Supported CURL Operations
+## Supported CURL Operations
 
 ```
 # Get all products
