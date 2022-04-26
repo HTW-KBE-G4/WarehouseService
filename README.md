@@ -49,7 +49,7 @@ API Endpoint: ````component/````
 
 ```
 # Get all products
-GET /components
+GET /component
 
 # Get specific product
 GET /component/{id}
