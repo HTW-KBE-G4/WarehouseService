@@ -1,0 +1,31 @@
+version: '3.3'
+
+services:
+  db:
+    container_name: db
+    image: mysql/mysql-server
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'db'
+      # non-root user for db access
+      MYSQL_USER: 'user'
+      # password for db-user acc
+      MYSQL_PASSWORD: 'password'
+      # root password
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+
+
+  warehouse:
+    #builds the spring service rather than pulling the docker image from public repository 
+    build: .
+    #de-comment below to pull spring image from public repository rather than building it locally
+    #image: profanta3/htwb-kbe-g4:main
+    depends_on:
+      - db
+    ports:
+      - "3002:3002"
+      - "8080:8080"
