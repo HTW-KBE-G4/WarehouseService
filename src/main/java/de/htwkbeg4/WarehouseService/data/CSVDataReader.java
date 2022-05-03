@@ -44,7 +44,7 @@ public class CSVDataReader {
 
 
             CSVParser parser = new CSVParserBuilder()
-                    .withSeparator(';')
+                    .withSeparator(',')
                     .build();
 
             CSVReader csvReader = new CSVReaderBuilder(new InputStreamReader(inputStream, StandardCharsets.UTF_8))
