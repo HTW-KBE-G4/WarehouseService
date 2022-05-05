@@ -4,12 +4,9 @@ import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
-import com.opencsv.enums.CSVReaderNullFieldIndicator;
 import de.htwkbeg4.WarehouseService.model.PCComponent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
+import de.htwkbeg4.WarehouseService.model.Product;
+import de.htwkbeg4.WarehouseService.repository.PCComponentRepository;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
@@ -18,13 +15,18 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class CSVDataReader {
 
     private ResourceLoader resourceLoader;
 
-    CSVDataReader(ResourceLoader resourceLoader) {
+    private PCComponentRepository pcComponentRepository;
+
+    CSVDataReader(ResourceLoader resourceLoader, PCComponentRepository pcComponentRepository) {
         this.resourceLoader = resourceLoader;
+        this.pcComponentRepository = pcComponentRepository;
     }
 
     /**
@@ -37,8 +39,6 @@ public class CSVDataReader {
         List<String[]> list = new ArrayList<>();
 
         try {
-            //FileReader fileReader = new FileReader(new ClassPathResource(path).getInputStream().toString());
-
             Resource resource = resourceLoader.getResource(path);
             InputStream inputStream = resource.getInputStream();
 
@@ -65,18 +65,47 @@ public class CSVDataReader {
     }
 
     /**
-     * returns a List of Objects representating the csv file entries
+     * returns a List of Components representating the csv file entries
      * @param path the path to the file
      * @return the Lsit ob objects read by csv
      */
-    public List<PCComponent> getObjects(String path) {
+    public List<PCComponent> getComponents(String path) {
         List<String[]> list = readData(path);
         List<PCComponent> objects = new ArrayList<>();
 
 
         for (String[] comp :
                 list) {
-            objects.add(new PCComponent(Long.getLong(comp[0]), comp[1], comp[2], comp[3], comp[4], comp[5], comp[6], comp[7], comp[8], comp[9], comp[10]));
+            objects.add(new PCComponent(Long.parseLong(comp[0]), comp[1], comp[2], comp[3], Float.parseFloat(comp[4]), comp[5], comp[6], Float.parseFloat(comp[7]), comp[8], Long.parseLong(comp[9]), comp[10]));
+        }
+
+        return objects;
+    }
+
+    /**
+     * returns a List of Products representating the csv file entries
+     * @param path the path to the file
+     * @return the Lsit ob objects read by csv
+     */
+    public List<Product> getProducts(String path) {
+        List<String[]> list = readData(path);
+        List<Product> objects = new ArrayList<>();
+
+
+        for (String[] comp :
+                list) {
+            String[] s = comp[2].split(",");
+            System.out.println("Got component IDS: "+ Arrays.toString(s));
+
+            //map string array to Long set
+            Set<Long> components = Arrays.stream(s).map(Long::parseLong).collect(Collectors.toSet());
+            System.out.println("Components asLong: "+ components);
+
+            Set<PCComponent> pcComponentSet = components.stream()
+                    .map(e -> pcComponentRepository.findById(e)
+                            .orElseThrow())
+                    .collect(Collectors.toSet());
+            objects.add(new Product(Long.getLong(comp[0]), comp[1], pcComponentSet));
         }
 
         return objects;
