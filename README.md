@@ -2,55 +2,67 @@
 
 Backend-Storage Service for Online Shop
 
-# Running without docker
+# General Infos
 
-Start development server  inside root directory with
+This Spring Service is configured and build to run inside a docker-compose environment.
+Furthermore this Service should be combined with the [Product-Backend-Service](https://github.com/HTW-KBE-G4/ProductService).
 
+# How to run
+
+Run this WarehouseService with given docker-compose configuration with
+```shell
+docker-compose up -d
 ```
-nvm spring-boot:run
-```
+inside the repo root directory. Docker-compose will do following:
+- build and instantiate the WarehouseService docker container based on the `dockerfile`.
+- Instantiate a mysqlServer container
+- create a internal network needed by the ProductService to access this rest controller.
 
-Spring Depends on an MySQL database which should run on port ```3306```. 
-
-## Configure Spring for local database
-
-Configuration changes are beeing made at ``application.properties``-file.
-
-- Change JDBC String to connect to ```localhost``` rather than ```db```. 
-- might need to change user credentials
-- default database should be named ```db```
-
-# Running with docker
-
-To start the docker service including db image run 
-
-```
-docker-compose up
-``` 
-
-inside the root directory. With default configuration docker-compose will build the image with the ```dockerfile```. 
-
-Uncomment
-```
-#image: profanta3/htwb-kbe-g4:main
-```
-inside docker-compose to pull the image from docker repository rather than building it. And comment out:
-```
-build: .
-```
 
 # API
 
+## Endpoint
+
 Server Port: ```3002```
 
-API Endpoint: ````component/````
+```
+# Product API
 
-## Supported CURL Operations
+## Get all products
+GET /products
+
+# Component API
+
+## Get all components
+GET /components
 
 ```
-# Get all products
-GET /component
 
-# Get specific product
-GET /component/{id}
+## JSON  Body
+
+Example for all components
+```
+GET /components 
+```
+
+```json5
+[
+  {  
+  "component_id":1,
+  "type":"CPU",
+  "model":"i7-10700K",
+  "description":"Die Intel Core i7 Prozessoren stellen dank schnellerer, intelligenter Multicochnik, die Rechenleistung ",
+  "manufacturer":"Intel",
+  "releaseDate":"2019",
+  "uvp":374.0,
+  "weight":10.0,
+  "productName":"Intel® Core™ i7-10700K Prozessor",
+  "ean":5032037188609,
+  "imageURL":"https://pixabay.com/get/g480552bae51294d688aaae5fad719d5e7298799356734268fc625150f585b6bc35323a108180b1a667e3a29cb0e4d6320608a34cd071d5a57a973e14b09ab9de433befd4ae26cfb6007ce12a5306009b_1920.jpg"
+  },
+  {/*...*/},
+  {/*...*/},
+  {/*...*/},
+  {/*...*/}
+]
 ```
