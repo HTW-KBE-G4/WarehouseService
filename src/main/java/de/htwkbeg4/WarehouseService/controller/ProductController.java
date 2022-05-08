@@ -18,7 +18,7 @@ public class ProductController {
     private ProductRepository productRepository;
 
     @GetMapping("")
-    public List<Product> getAllProducts() {
+    public List<Product> getAllProductsFromDatabase() {
         return this.productRepository.findAll();
     }
 }

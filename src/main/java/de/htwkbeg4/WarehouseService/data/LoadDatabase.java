@@ -36,7 +36,7 @@ public class LoadDatabase {
 
         CSVDataReader csvDataReader = new CSVDataReader(this.resourceLoader, pcComponentRepository);
 
-        List<PCComponent> list = csvDataReader.getComponents(WarehouseServiceApplication.COMPONENT_PATH);
+        List<PCComponent> list = csvDataReader.getComponentsFromCSV(WarehouseServiceApplication.COMPONENT_PATH);
 
         return args -> {
             productRepository.deleteAll();;
@@ -47,7 +47,7 @@ public class LoadDatabase {
                 log.info("preloading..."+repository.save(component));
             }
 
-            List<Product> productList = csvDataReader.getProducts(WarehouseServiceApplication.PRODUCT_PATH);
+            List<Product> productList = csvDataReader.getProductsFromCSV(WarehouseServiceApplication.PRODUCT_PATH);
             for (Product product :
                     productList) {
                 log.info("preloading product..."+productRepository.save(product));

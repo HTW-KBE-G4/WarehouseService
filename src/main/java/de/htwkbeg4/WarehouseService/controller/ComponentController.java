@@ -19,12 +19,8 @@ public class ComponentController {
         this.repository = repository;
     }
 
-    /**
-     * Returns all PCComponents from the Repository representating the DB Table
-     * @return the list of all components
-     */
     @GetMapping("")
-    List<PCComponent> getAll() {
+    List<PCComponent> getAllComponentsFromDatabase() {
         return this.repository.findAll();
     }
 }

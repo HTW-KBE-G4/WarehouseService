@@ -30,12 +30,12 @@ public class CSVDataReader {
     }
 
     /**
-     * Reads data from file
+     * Reads data from a csv file
      * @param path path to file
-     * @return Array representating the Data for inport into db
+     * @return Array of String arrays where each string-array represents a CSV line.
      * @throws IOException when file was not found
      */
-    public List<String[]> readData(String path){
+    private List<String[]> readData(String path){
         List<String[]> list = new ArrayList<>();
 
         try {
@@ -67,16 +67,17 @@ public class CSVDataReader {
     /**
      * returns a List of Components representating the csv file entries
      * @param path the path to the file
-     * @return the Lsit ob objects read by csv
+     * @return the list ob components read from csv
      */
-    public List<PCComponent> getComponents(String path) {
+    public List<PCComponent> getComponentsFromCSV(String path) {
         List<String[]> list = readData(path);
         List<PCComponent> objects = new ArrayList<>();
 
-
         for (String[] comp :
                 list) {
-            objects.add(new PCComponent(Long.parseLong(comp[0]), comp[1], comp[2], comp[3], Float.parseFloat(comp[4]), comp[5], comp[6], Float.parseFloat(comp[7]), comp[8], Long.parseLong(comp[9]), comp[10]));
+            objects.add(new PCComponent(Long.parseLong(comp[0]), comp[1], comp[2], comp[3],
+                    Float.parseFloat(comp[4]), comp[5], comp[6], Float.parseFloat(comp[7]),
+                    comp[8], Long.parseLong(comp[9]), comp[10]));
         }
 
         return objects;
@@ -85,9 +86,9 @@ public class CSVDataReader {
     /**
      * returns a List of Products representating the csv file entries
      * @param path the path to the file
-     * @return the Lsit ob objects read by csv
+     * @return the list ob products read by csv
      */
-    public List<Product> getProducts(String path) {
+    public List<Product> getProductsFromCSV(String path) {
         List<String[]> list = readData(path);
         List<Product> objects = new ArrayList<>();
 
@@ -95,11 +96,9 @@ public class CSVDataReader {
         for (String[] comp :
                 list) {
             String[] s = comp[2].split(",");
-            System.out.println("Got component IDS: "+ Arrays.toString(s));
 
             //map string array to Long set
             Set<Long> components = Arrays.stream(s).map(Long::parseLong).collect(Collectors.toSet());
-            System.out.println("Components asLong: "+ components);
 
             Set<PCComponent> pcComponentSet = components.stream()
                     .map(e -> pcComponentRepository.findById(e)
