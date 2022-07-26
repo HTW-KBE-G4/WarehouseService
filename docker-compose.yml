@@ -18,6 +18,7 @@ services:
 
 
   warehouse:
+    container_name: warehouse
     #builds the spring service rather than pulling the docker image from public repository 
     build: .
     #de-comment below to pull spring image from public repository rather than building it locally
@@ -27,4 +28,3 @@ services:
       - warehousedb
     ports:
       - "3002:3002"
-      - "8080:8080"
